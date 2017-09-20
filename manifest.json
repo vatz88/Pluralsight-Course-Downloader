@@ -1,0 +1,17 @@
+{
+  "name": "Pluralsight Course Downloader",
+  "version": "0.1",
+  "manifest_version": 2,
+  "content_scripts": [{
+    "matches": ["https://app.pluralsight.com/*"],
+    "js": ["jquery.min.js", "script.js"],
+    "run_at": "document_end"
+  }],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+    "<all_urls>",
+    "downloads"
+  ]
+}
