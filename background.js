@@ -9,22 +9,15 @@ chrome.runtime.onMessage.addListener(
             try {
                 chrome.downloads.download({
                     url: request.link,
-                    // filename: request.filename
                 });
                 sendResponse({
-                    farewell: 'File: ' + request.filename + ' downloaded'
+                    farewell: 'File: ' + filename + ' downloaded'
                 });
             } catch (err) {
                 alert("Error: " + err.message);
             }
         }
     });
-
-var getLocation = function (href) {
-    var l = document.createElement("a");
-    l.href = href;
-    return l;
-};
 
 chrome.downloads.onDeterminingFilename.addListener(function (item, suggest) {
     if (flag) {
