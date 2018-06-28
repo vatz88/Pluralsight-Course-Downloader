@@ -14,7 +14,7 @@ Hit the `s` key while watching the video on pluralsight and it'll be downloaded 
 
 ## Why I Build It
 
-I build this extention when I was in colege. We had limited WiFi data allowance, it was slow and worked only till 12:30AM. Keep these things in mind I build this extension.
+I build this extention when I was in college. We had limited WiFi data allowance, it was slow and worked only till 12:30AM. Keeping these things in mind I build this extension.
 
 **I no more use this extension and there is no further development from my side**. Although, anyone willing to do any further development is free to open issues and make PRs. Least I can do is review and merge them.
 
