@@ -10,7 +10,9 @@ Follow this [guide](https://developer.chrome.com/extensions/getstarted#unpacked)
 
 ## Usage
 
-Hit the `s` key while watching the video on pluralsight and it'll be downloaded and organized in folder with appropriate file name!
+Hit the `s` key while watching the video on pluralsight and it'll be downloaded and organized in folder with appropriate file name! Subsequent videos in queue will automatically download after a gap of 50 seconds.
+
+Hit the `g` key while watching the video on pluralsight and it'll be downloaded and organized in folder with appropriate file name!
 
 ## Why I Build It
 
