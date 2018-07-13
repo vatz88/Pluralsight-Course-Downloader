@@ -131,5 +131,5 @@ function downloadVideo() {
 }
 
 function pauseVideo() {
-  $('#play-control').click()
+  $('#play-control').click();
 }
