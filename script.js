@@ -1,17 +1,20 @@
+var count = 0;
+
 $(function () {
   $(document).keypress(function (e) {
-    if (e.which === 83 || e.which === 115) {
+    if (e.which === 115 || e.which === 83) {
+      // keypress `s`
+      downloadCurrentVideo();
+    } else if (e.which === 97 || e.which === 65) {
+      // keypress `a`
       count = 0;
-      downloadVideo();
-    } else if(e.which === 103) {
-      downloadVideoOne();
+      downloadAllVideos();
     }
   });
 });
 
-var count = 0;
 
-function downloadVideoOne() {
+function downloadCurrentVideo() {
   var link = $('#vjs_video_3_html5_api').attr('src');
 
   var coursename = $('#course-title-link').text();
@@ -62,7 +65,7 @@ function downloadVideoOne() {
 }
 
 
-function downloadVideo() {
+function downloadAllVideos() {
   var link = $('#vjs_video_3_html5_api').attr('src');
 
   var coursename = $('#course-title-link').text();
@@ -115,15 +118,15 @@ function downloadVideo() {
       console.log(response.actionStatus);
       if (foldername2 != finalfoldername) {
         $('#next-control').click();
-        setTimeout(pauseVideo, 5000);
-        setTimeout(downloadVideo, 50000);  
-      } else if(foldername2 == finalfoldername) {
+        setTimeout(pauseVideo, 8000);
+        setTimeout(downloadAllVideos, 30000);
+      } else if (foldername2 == finalfoldername) {
         if (filename2 == finalfilename) {
-
+          alert("Full Course Downloaded!");
         } else {
           $('#next-control').click();
-          setTimeout(pauseVideo, 5000);
-          setTimeout(downloadVideo, 50000);
+          setTimeout(pauseVideo, 8000);
+          setTimeout(downloadAllVideos, 30000);
         }
       }
     }
@@ -131,5 +134,7 @@ function downloadVideo() {
 }
 
 function pauseVideo() {
-  $('#play-control').click();
+  if ($('#play-control').length === 1) {
+    $('#play-control').click();
+  }
 }
