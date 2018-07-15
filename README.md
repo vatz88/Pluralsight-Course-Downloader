@@ -22,7 +22,7 @@ I build this extention when I was in college. We had limited WiFi data allowance
 
 ## Contributors
 
-Thanks to all the [contributors](https://github.com/vatz88/Pluralsight-Course-Downloader/contributors)!.
+Thanks to all the [contributors](https://github.com/vatz88/Pluralsight-Course-Downloader/contributors)!
 
 ---
 
