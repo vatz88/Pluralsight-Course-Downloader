@@ -1,140 +1,127 @@
 var count = 0;
 
-$(function () {
-  $(document).keypress(function (e) {
-    if (e.which === 115 || e.which === 83) {
-      // keypress `s`
-      downloadCurrentVideo();
-    } else if (e.which === 97 || e.which === 65) {
-      // keypress `a`
-      count = 0;
-      downloadAllVideos();
-    }
-  });
-});
+Number.prototype.myPadding = function() {
 
+  var number = this.valueOf();
+  var length =2;
+  var str = '' + number;
+ while (str.length < length) {
+     str = '0' + str;
+ } 
+ return str;
+};
 
-function downloadCurrentVideo() {
-  var link = $('#vjs_video_3_html5_api').attr('src');
+var pauseVideo = function pauseVideo() {
+  if ($('#play-control').length === 1) {
+    $('#play-control').click();
+  }
+}
 
-  var coursename = $('#course-title-link').text();
-  coursename = coursename.replace(/[\/:?><]/g, '');
+var getCourseName = function(){  
+  var courseName = $('#course-title-link').text();
+  courseName = courseName.replace(/[\/:?><]/g, '');
+  return courseName;
+}
 
-  var folder = $('li.selected')
+var getSectionDom = function(){
+  
+  var folderDom = $('li.selected')
     .parents('ul')
     .prev('header')
     .children('div')
     .eq(1);
-  folder =
-    folder
-    .parents('section.module.open')
-    .eq(0)
-    .index() +
-    1 +
-    ' - ' +
-    folder.find('h2').text();
-  folder = folder.replace(/[\/:?><]/g, '');
 
-  var filename =
-    $('li.selected')
-    .eq(1)
-    .index() +
-    1 +
-    ' - ' +
-    $('#module-clip-title')
-    .text()
-    .split(' : ')
-    .pop()
-    .trim() +
-    '.' +
-    link
-    .split('?')[0]
-    .split('.')
-    .pop();
-  filename = filename.replace(/[\/:?><]/g, '');
+    return folderDom;
+}
 
+var getSaveFilePath = function(){
+  
+  var link = $('#vjs_video_3_html5_api').attr('src');
+  var courseName = getCourseName();
+  // console.log(courseName);
+
+  var folderDom = getSectionDom();
+
+  var sectionName = folderDom.find('h2').text();
+  var sectionIndex = (folderDom.parents('section.module.open').eq(0).index() + 1).myPadding();
+  var saveFolder =  sectionIndex + ' - ' +  sectionName;
+  saveFolder = saveFolder.replace(/[\/:?><]/g, '');
+  // console.log(saveFolder);
+
+  var rawFileName = $('#module-clip-title').text().split(' : ').pop().trim();
+  var fileIndex =($('li.selected').eq(1).index() + 1).myPadding();
+  var saveFileName = fileIndex + ' - ' + rawFileName + '.' +  link.split('?')[0].split('.').pop();
+  saveFileName = saveFileName.replace(/[\/:?><]/g, '');
+  // console.log(saveFileName);
+
+  console.log('processing => ' + courseName + ' ' + sectionIndex + '-' + fileIndex);
+  return 'Pluralsight/' + courseName + '/' + saveFolder + '/' + saveFileName;
+}
+
+var downloadCurrentVideo = function() {
+  var link = $('#vjs_video_3_html5_api').attr('src');
+  console.log('downloadCurrentVideo: ' + link);
+
+  var saveFilePath = getSaveFilePath();
+  console.log('chrome download => ' + saveFilePath);
   chrome.runtime.sendMessage({
       action: 'download',
       link: link,
-      filename: 'Pluralsight/' + coursename + '/' + folder + '/' + filename,
+      filename: saveFilePath
     },
     function (response) {
-      console.log(response.actionStatus);
+      console.log('=> ' + response.actionStatus);
     }
   );
 }
 
+var downloadAllVideos = function() {
 
-function downloadAllVideos() {
+  var folderDom = getSectionDom();
   var link = $('#vjs_video_3_html5_api').attr('src');
+  var sectionName = folderDom.find('h2').text();
+  var finalFolderName = $('section:last').find('h2').text();
+  var downloadAllVideosTimeout = 120000;
+  var pauseVideoTimeout = 8000;
 
-  var coursename = $('#course-title-link').text();
-  coursename = coursename.replace(/[\/:?><]/g, '');
+  var rawFileName = $('#module-clip-title').text().split(' : ').pop().trim();
+  var finalFileName = $('section:last').find('li:last').find('h3').text();
 
-  var folder = $('li.selected')
-    .parents('ul')
-    .prev('header')
-    .children('div')
-    .eq(1);
-  folder =
-    folder
-    .parents('section.module.open')
-    .eq(0)
-    .index() +
-    1 +
-    ' - ' +
-    folder.find('h2').text();
-  folder = folder.replace(/[\/:?><]/g, '');
-
-  var filename =
-    $('li.selected')
-    .eq(1)
-    .index() +
-    1 +
-    ' - ' +
-    $('#module-clip-title')
-    .text()
-    .split(' : ')
-    .pop()
-    .trim() +
-    '.' +
-    link
-    .split('?')[0]
-    .split('.')
-    .pop();
-  filename = filename.replace(/[\/:?><]/g, '');
-
-  var filename2 = $('#module-clip-title').text().split(' : ').pop().trim();
-  var foldername2 = $('li.selected').parents('ul').prev('header').children('div').eq(1).find('h2').text();
-  var finalfilename = $('section:last').find('li:last').find('h3').text();
-  var finalfoldername = $('section:last').find('h2').text();
+  var saveFilePath = getSaveFilePath();
+  console.log('chrome download => ' + saveFilePath);
 
   chrome.runtime.sendMessage({
       action: 'download',
       link: link,
-      filename: 'Pluralsight/' + coursename + '/' + folder + '/' + filename,
+      filename: saveFilePath
     },
     function (response) {
-      console.log(response.actionStatus);
-      if (foldername2 != finalfoldername) {
+      console.log('response => ' + response.actionStatus);
+      if (sectionName == finalFolderName && rawFileName == finalFileName) { 
+        alert("Full Course Downloaded!");
+      }
+      else {         
         $('#next-control').click();
-        setTimeout(pauseVideo, 8000);
-        setTimeout(downloadAllVideos, 30000);
-      } else if (foldername2 == finalfoldername) {
-        if (filename2 == finalfilename) {
-          alert("Full Course Downloaded!");
-        } else {
-          $('#next-control').click();
-          setTimeout(pauseVideo, 8000);
-          setTimeout(downloadAllVideos, 30000);
-        }
+        setTimeout(pauseVideo, pauseVideoTimeout);
+        setTimeout(downloadAllVideos, downloadAllVideosTimeout); 
       }
     }
   );
 }
 
-function pauseVideo() {
-  if ($('#play-control').length === 1) {
-    $('#play-control').click();
-  }
-}
+
+$(function () {
+
+  $(document).keypress(function (e) {
+    if (e.which === 115 || e.which === 83) {
+      // keypress `s`
+      console.log('s => current');
+      downloadCurrentVideo();
+    } else if (e.which === 97 || e.which === 65) {
+      // keypress `a`
+      count = 0;
+      console.log('a => all');
+      downloadAllVideos();
+    }
+  });
+});
