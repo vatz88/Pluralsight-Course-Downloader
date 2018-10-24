@@ -10,6 +10,15 @@ Number.prototype.myPadding = function () {
   return str;
 };
 
+function getVideoSrc(){
+  var link = $('#vjs_video_3_html5_api');
+  if(!link.length){
+      //try fix get src error(domId changed) 
+      link = $('video');
+  }
+  return link.attr('src');
+}
+
 function pauseVideo() {
   if ($('#play-control').length === 1) {
     $('#play-control').click();
@@ -32,7 +41,7 @@ function getSectionDom() {
 }
 
 function getSaveFilePath() {
-  var link = $('#vjs_video_3_html5_api').attr('src');
+  var link = getVideoSrc();
   var courseName = getCourseName();
   // console.log(courseName);
 
@@ -54,7 +63,7 @@ function getSaveFilePath() {
 }
 
 function downloadCurrentVideo() {
-  var link = $('#vjs_video_3_html5_api').attr('src');
+  var link = getVideoSrc();
   console.log('downloadCurrentVideo: ' + link);
 
   var saveFilePath = getSaveFilePath();
@@ -71,7 +80,7 @@ function downloadCurrentVideo() {
 }
 
 function downloadAllVideos() {
-  var link = $('#vjs_video_3_html5_api').attr('src');
+  var link = getVideoSrc();
   var saveFilePath = getSaveFilePath();
   console.log('chrome download => ' + saveFilePath);
 
