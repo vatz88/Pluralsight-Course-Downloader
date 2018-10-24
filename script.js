@@ -13,8 +13,8 @@ Number.prototype.myPadding = function () {
 function getVideoSrc(){
   var link = $('#vjs_video_3_html5_api');
   if(!link.length){
-      //try fix get src error(domId changed) 
-      link = $('video');
+    //try fix get src error(domId changed) 
+    link = $('video');
   }
   return link.attr('src');
 }
