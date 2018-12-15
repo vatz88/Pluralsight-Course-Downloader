@@ -1,4 +1,5 @@
 var count = 0;
+var shouldBeSequential = false;
 
 Number.prototype.myPadding = function () {
   var number = this.valueOf();
@@ -13,7 +14,7 @@ Number.prototype.myPadding = function () {
 function getVideoSrc(){
   var link = $('#vjs_video_3_html5_api');
   if(!link.length){
-    //try fix get src error(domId changed) 
+    //try fix get src error(domId changed)
     link = $('video');
   }
   return link.attr('src');
@@ -93,7 +94,7 @@ function downloadAllVideos() {
   var finalFileName = $('section:last').find('li:last').find('h3').text();
 
   chrome.runtime.sendMessage({
-      action: 'download',
+      action: shouldBeSequential? 'download-sync': 'download',
       link: link,
       filename: saveFilePath
     },
@@ -103,8 +104,10 @@ function downloadAllVideos() {
         alert("Full Course Downloaded!");
       } else {
         $('#next-control').click();
-        setTimeout(pauseVideo, pauseVideoTimeout);
-        setTimeout(downloadAllVideos, downloadAllVideosTimeout);
+        // Use less timeout in sequential mode, since the
+        // response is  already async.
+        setTimeout(pauseVideo, shouldBeSequential? pauseVideoTimeout / 2 : pauseVideoTimeout);
+        setTimeout(downloadAllVideos, shouldBeSequential? downloadAllVideosTimeout / 3 :  downloadAllVideosTimeout);
       }
     }
   );
@@ -119,6 +122,8 @@ $(function () {
     } else if (e.which === 97 || e.which === 65) {
       // keypress `a`
       count = 0;
+      shouldBeSequential = confirm('Do you want your downloads to be sequential?');
+
       console.log('a => all');
       downloadAllVideos();
     }
