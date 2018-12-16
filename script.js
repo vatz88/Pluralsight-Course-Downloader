@@ -1,5 +1,5 @@
 var count = 0;
-var shouldBeSequential = false;
+var shouldBeSequential = true;
 
 Number.prototype.myPadding = function () {
   var number = this.valueOf();
@@ -122,7 +122,7 @@ $(function () {
     } else if (e.which === 97 || e.which === 65) {
       // keypress `a`
       count = 0;
-      shouldBeSequential = confirm('Do you want your downloads to be sequential?');
+      // shouldBeSequential = confirm('Do you want your downloads to be sequential?');
 
       console.log('a => all');
       downloadAllVideos();
