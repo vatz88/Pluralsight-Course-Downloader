@@ -68,6 +68,8 @@ function downloadCurrentVideo() {
   console.log('downloadCurrentVideo: ' + link);
 
   var saveFilePath = getSaveFilePath();
+  //Removed new Line (\r\n or \n ) from file path
+  saveFilePath = saveFilePath.replace(/(\r\n|\n|\r)/gm, "");
   console.log('chrome download => ' + saveFilePath);
   chrome.runtime.sendMessage({
       action: 'download',
