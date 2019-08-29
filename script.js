@@ -60,7 +60,8 @@ function getSaveFilePath() {
   // console.log(saveFileName);
 
   console.log('processing => ' + courseName + ' ' + sectionIndex + ' - ' + fileIndex);
-  return 'Pluralsight/' + courseName + '/' + saveFolder + '/' + saveFileName;
+  var saveFilePath = 'Pluralsight/' + courseName + '/' + saveFolder + '/' + saveFileName
+  return saveFilePath.replace(/(\r\n|\n|\r)/gm, "");
 }
 
 function downloadCurrentVideo() {
