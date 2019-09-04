@@ -29,7 +29,7 @@ function pauseVideo() {
 function getCourseName() {
   var courseName = $('#course-title-link').text();
   courseName = courseName.replace(/[\/:?><]/g, '');
-  return courseName;
+  return courseName.trim();
 }
 
 function getSectionDom() {
